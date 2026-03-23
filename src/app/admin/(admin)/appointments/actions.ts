@@ -51,24 +51,26 @@ export async function saveAppointmentRequest(
     };
     
     await set(newAppointmentRef, newAppointmentData);
+    console.log('Appointment saved to Firebase successfully.');
     
     revalidatePath('/admin/appointments');
     
-    sendBookingConfirmation({ appointmentDetails: newAppointmentData })
-      .then(emailResult => {
-          if (!emailResult.success) {
-              console.error('Booking email notification failed:', emailResult.message);
-          } else {
-              console.log('Booking email notification sent.');
-          }
-      }).catch(error => {
-          console.error('An unhandled error occurred during email sending:', error);
-      });
+    try {
+      const emailResult = await sendBookingConfirmation({ appointmentDetails: newAppointmentData });
+      if (!emailResult.success) {
+          console.error('Booking email notification failed:', emailResult.message);
+      } else {
+          console.log('Booking email notification sent successfully.');
+      }
+    } catch (emailError) {
+      console.error('Failed to send email notification during appointment save:', emailError);
+      // We don't fail the whole request just because email failed, but we log it.
+    }
 
     return { success: true };
-  } catch (error) {
-    console.error('Error saving appointment request:', error);
-    return { success: false, error: 'Failed to save appointment request.' };
+  } catch (error: any) {
+    console.error('CRITICAL: Error in saveAppointmentRequest:', error);
+    return { success: false, error: error.message || 'Failed to save appointment request.' };
   }
 }
 
