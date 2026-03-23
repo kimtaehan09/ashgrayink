@@ -75,9 +75,15 @@ export async function saveAboutData(
   data: AboutSectionData,
   idToken: string
 ): Promise<{ success: boolean; error?: string }> {
-    const DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
+    let DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
+    
+    // Remove trailing slash if present
+    if (DATABASE_URL?.endsWith('/')) {
+        DATABASE_URL = DATABASE_URL.slice(0, -1);
+    }
+
     if (!DATABASE_URL) {
-      return { success: false, error: 'Firebase database URL is not configured.' };
+      return { success: false, error: 'Firebase 데이터베이스 URL이 설정되지 않았습니다. .env.local 파일을 확인해주세요.' };
     }
 
     try {
