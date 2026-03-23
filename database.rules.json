@@ -1,0 +1,15 @@
+
+{
+  "rules": {
+    "sections": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "appointments": {
+      ".read": "auth != null",
+      "$appointmentId": {
+        ".write": "!data.exists() || auth != null"
+      }
+    }
+  }
+}

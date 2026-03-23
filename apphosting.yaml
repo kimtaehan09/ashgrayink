@@ -1,0 +1,5 @@
+id: Studio
+runConfig:
+  maxInstances: 1
+firebase:
+  site: Studio
