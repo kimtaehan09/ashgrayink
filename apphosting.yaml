@@ -3,3 +3,6 @@ runConfig:
   maxInstances: 1
 firebase:
   site: Studio
+env:
+  - variable: FIREBASE_DATABASE_URL
+    value: https://inkhub-dpktu-default-rtdb.firebaseio.com
