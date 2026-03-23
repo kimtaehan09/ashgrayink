@@ -1,3 +1,4 @@
+# Triggering redeploy for environment variable updates
 id: Studio
 runConfig:
   maxInstances: 1
