@@ -55,7 +55,15 @@ export async function saveAppointmentRequest(
     
     revalidatePath('/admin/appointments');
     
+    // Diagnostic check for environment variables (Server-side)
+    const hasEmailUser = !!process.env.EMAIL_USER;
+    const hasEmailPass = !!process.env.EMAIL_PASS;
+    console.log(`Environment check: EMAIL_USER=${hasEmailUser}, EMAIL_PASS=${hasEmailPass}`);
+
     try {
+      if (!hasEmailUser || !hasEmailPass) {
+        throw new Error(`Email configuration missing on server (User: ${hasEmailUser}, Pass: ${hasEmailPass})`);
+      }
       const emailResult = await sendBookingConfirmation({ appointmentDetails: newAppointmentData });
       if (!emailResult.success) {
           console.error('Booking email notification failed:', emailResult.message);
